@@ -18,7 +18,7 @@ var STATUS_IMPORTANCE = {
 var IndexHistory = React.createClass({
 
   propTypes: {
-    large: React.PropTypes.bool,
+    large: React.PropTypes.bool, // DEPRECATED: remove in 0.5, use size
     params: React.PropTypes.shape({
       category: React.PropTypes.string,
       query: React.PropTypes.object,
@@ -26,17 +26,49 @@ var IndexHistory = React.createClass({
       interval: React.PropTypes.string,
       count: React.PropTypes.number
     }),
+    points: React.PropTypes.bool,
     series: React.PropTypes.arrayOf(React.PropTypes.shape({
       label: React.PropTypes.string,
       value: React.PropTypes.number
     })),
-    small: React.PropTypes.bool,
+    size: React.PropTypes.oneOf(['small', 'medium', 'large']),
+    small: React.PropTypes.bool, // DEPRECATED: remove in 0.5, use size
     smooth: React.PropTypes.bool,
     threshold: React.PropTypes.number,
     type: React.PropTypes.oneOf(['bar', 'area', 'line'])
   },
 
   mixins: [Reflux.ListenerMixin, IntlMixin],
+
+  getInitialState: function () {
+    return {
+      params: this.props.params,
+      series: (this.props.series || []),
+      size: this._normalizeSize(this.props)
+    };
+  },
+
+  componentDidMount: function () {
+    if (! this.props.series) {
+      this.listenTo(IndexActions.getAggregate.completed,
+        this._onGetAggregateCompleted);
+      IndexActions.getAggregate(this.state.params, true);
+    }
+  },
+
+  componentWillReceiveProps: function (newProps) {
+    this.setState({
+      params: newProps.params,
+      size: this._normalizeSize(newProps)
+    });
+    if (! newProps.series) {
+      IndexActions.getAggregate(newProps.params, true, this.state.request);
+    }
+  },
+
+  componentWillUnmount: function () {
+    IndexActions.stopWatching(this.state.request);
+  },
 
   _onGetAggregateCompleted: function (response, params, request) {
     response = response[0];
@@ -72,30 +104,8 @@ var IndexHistory = React.createClass({
     }
   },
 
-  getInitialState: function () {
-    return {
-      params: this.props.params,
-      series: (this.props.series || [])
-    };
-  },
-
-  componentDidMount: function () {
-    if (! this.props.series) {
-      this.listenTo(IndexActions.getAggregate.completed,
-        this._onGetAggregateCompleted);
-      IndexActions.getAggregate(this.state.params, true);
-    }
-  },
-
-  componentWillReceiveProps: function (newProps) {
-    this.setState({params: newProps.params});
-    if (! newProps.series) {
-      IndexActions.getAggregate(newProps.params, true, this.state.request);
-    }
-  },
-
-  componentWillUnmount: function () {
-    IndexActions.stopWatching(this.state.request);
+  _normalizeSize: function (props) {
+    return props.size || (props.small ? 'small' : (props.large ? 'large' : null));
   },
 
   render: function () {
@@ -104,9 +114,9 @@ var IndexHistory = React.createClass({
         xAxis={this.state.xAxis || []}
         legend={true}
         legendTotal={true}
-        small={this.props.small}
-        large={this.props.large}
+        size={this.state.size}
         smooth={this.props.smooth}
+        points={this.props.points}
         type={this.props.type}
         threshold={this.props.threshold} />
     );

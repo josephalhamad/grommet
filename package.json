@@ -1,6 +1,6 @@
 {
   "name": "grommet",
-  "version": "0.3.2",
+  "version": "0.3.6",
   "main": "src/js/index.js",
   "description": "The most advanced UX framework for enterprise applications.",
   "authors": [
@@ -20,8 +20,10 @@
   "bin": {
     "grommet": "./bin/grommet.js"
   },
+  "engine-strict": true,
   "engines": {
-    "node": ">= 0.9"
+    "node": ">= 0.10",
+    "npm": ">= 1.4"
   },
   "scripts": {
     "test": "gulp test"
@@ -49,7 +51,6 @@
     "react-gravatar": "^2.0.0",
     "react-intl": "^1.2.0",
     "react-router": "^0.13.3",
-    "react-time": "^3.0.0",
     "reflux": "^0.2.7",
     "superagent": "^1.1.0",
     "yargs": "^3.8.0",
@@ -77,7 +78,6 @@
     "gulp-mocha": "^2.0.1",
     "gulp-live-server": "^0.0.23",
     "gulp-preprocess": "^1.2.0",
-    "gulp-react": "^3.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-rsync": "0.0.5",
     "gulp-sass": "^2.0.4",
@@ -99,7 +99,6 @@
     "babel-eslint": "^4.0.10",
     "babel-core": "^5.6.15",
     "jsdom-no-contextify": "~3.1.0",
-    "react-tools": "^0.13.1",
     "run-sequence": "^1.0.2",
     "webpack": "^1.9.11",
     "webpack-dev-server": "^1.8.0",
@@ -108,7 +107,8 @@
     "rewire": "^2.3.3",
     "mocha-lcov-reporter": "^0.0.2",
     "selenium-standalone": "^4.2.2",
-    "webdriverio": "^2.4.5"
+    "webdriverio": "^2.4.5",
+    "rimraf": "^2.4.3"
   },
   "config": {
     "blanket": {

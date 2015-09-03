@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Grommet - User Experience for the Enterprise</title>
   <meta name="description" content="" />
+  <meta name="fragment" content="!" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="shortcut icon" type="image/png" href="img/shortcut-icon.png" />
@@ -65,11 +66,13 @@
       var again = false;
       if (document.body.classList.contains('loading')) {
         var ts = c.querySelectorAll('div.t.off');
-        var index = Math.floor(Math.random() * ts.length);
-        ts[index].classList.remove('off');
-        ts[index].classList.add('on');
-        if (ts.length > 1) {
-          again = true;
+        if (ts.length > 0) {
+          var index = Math.floor(Math.random() * ts.length);
+          ts[index].classList.remove('off');
+          ts[index].classList.add('on');
+          if (ts.length > 1) {
+            again = true;
+          }
         }
       }
       if (! again) {

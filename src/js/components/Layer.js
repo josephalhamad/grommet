@@ -27,13 +27,6 @@ var LayerOverlay = React.createClass({
 
   mixins: [KeyboardAccelerators],
 
-  _onClick: function (event) {
-    if (this.props.onClose &&
-      event.target === this.refs.background.getDOMNode()) {
-      this.props.onClose();
-    }
-  },
-
   getChildContext: function () {
     return {router: this.props.router};
   },
@@ -91,7 +84,7 @@ var LayerOverlay = React.createClass({
     }
 
     return (
-      <div ref="background" className={classes.join(' ')} onClick={this._onClick}>
+      <div ref="background" className={classes.join(' ')}>
         <div className={CLASS_ROOT + "__container"}>
           {closer}
           {this.props.children}
@@ -123,6 +116,19 @@ var Layer = React.createClass({
     return {
       align: 'center'
     };
+  },
+
+  componentDidMount: function () {
+    this._addOverlay();
+    this._renderOverlay();
+  },
+
+  componentDidUpdate: function () {
+    this._renderOverlay();
+  },
+
+  componentWillUnmount: function () {
+    this._removeOverlay();
   },
 
   _addOverlay: function () {
@@ -159,19 +165,6 @@ var Layer = React.createClass({
     React.unmountComponentAtNode(this._overlay);
     document.body.removeChild(this._overlay);
     this._overlay = null;
-  },
-
-  componentDidMount: function () {
-    this._addOverlay();
-    this._renderOverlay();
-  },
-
-  componentDidUpdate: function () {
-    this._renderOverlay();
-  },
-
-  componentWillUnmount: function () {
-    this._removeOverlay();
   },
 
   render: function () {

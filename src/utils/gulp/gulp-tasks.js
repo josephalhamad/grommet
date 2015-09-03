@@ -13,6 +13,8 @@ module.exports = function(gulp, opts) {
 
   var options = opts || {};
 
+  options.scsslint = options.scsslint === undefined ? true : options.scsslint;
+
   var dist = options.dist || path.resolve(process.cwd(), 'dist');
 
   var webpackConfig = {
@@ -100,6 +102,16 @@ module.exports = function(gulp, opts) {
 
   gulp.task('clean', function() {
     del.sync([dist]);
+  });
+
+  gulp.task('node-clean', function(done) {
+    require('rimraf')(path.resolve(process.cwd(), 'node_modules'), function (err) {
+      if (err) {
+        throw err;
+      }
+
+      done();
+    });
   });
 
   require('./gulp-tasks-linters')(gulp, options);
