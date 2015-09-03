@@ -22,12 +22,24 @@ var DocsSplit = React.createClass({
     title: React.PropTypes.node.isRequired
   },
 
+  getInitialState: function () {
+    return {showMenu: true};
+  },
+
+  componentDidMount: function () {
+    this._scrollToAnchor();
+  },
+
+  componentDidUpdate: function () {
+    this._scrollToAnchor();
+  },
+
   _scrollToAnchor: function () {
     if (this.refs.doc) {
       var doc = this.refs.doc.getDOMNode();
       var hash = window.location.hash.slice(1);
       if (hash) {
-        var anchor = doc.querySelectorAll('a.anchor[id=' + hash + ']')[0];
+        var anchor = doc.querySelectorAll('[id=' + hash + ']')[0];
         var scrollParent = DOM.findScrollParents(anchor)[0];
         scrollParent.scrollTop = anchor.offsetTop;
       } else {
@@ -59,18 +71,6 @@ var DocsSplit = React.createClass({
     if (this.props.onChange) {
       this.props.onChange();
     }
-  },
-
-  getInitialState: function () {
-    return {showMenu: true};
-  },
-
-  componentDidMount: function () {
-    this._scrollToAnchor();
-  },
-
-  componentDidUpdate: function () {
-    this._scrollToAnchor();
   },
 
   _renderTitle: function () {
